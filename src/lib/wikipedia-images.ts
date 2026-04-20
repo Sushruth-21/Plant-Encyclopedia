@@ -10,8 +10,9 @@ const imageCache = new Map<string, string | null>();
 
 // Manual overrides for plants whose Wikipedia page returns wrong/generic images
 const IMAGE_OVERRIDES: Record<string, string> = {
-  'rosa': 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Red_rose_02.jpg',
-  'rose': 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Red_rose_02.jpg',
+  'rosa': 'https://cdn.pixabay.com/photo/2015/04/19/08/32/rose-729509_1280.jpg',
+  'rose': 'https://cdn.pixabay.com/photo/2015/04/19/08/32/rose-729509_1280.jpg',
+  'jasmine': 'https://cdn.pixabay.com/photo/2015/02/06/16/42/jasmine-626329_1280.jpg',
 };
 
 /**
@@ -87,8 +88,7 @@ export async function enrichWithWikipediaImages(
       plant.default_image?.medium_url ||
       plant.default_image?.regular_url;
 
-    // Skip if image exists and is NOT a Pixabay URL (which is blocked)
-    if (existingImg && !existingImg.includes('cdn.pixabay.com')) {
+    if (existingImg) {
       return plant;
     }
 
