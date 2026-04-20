@@ -1,0 +1,157 @@
+import Link from "next/link";
+import { Leaf, Code, Heart } from "lucide-react";
+
+export default function Footer() {
+  return (
+    <footer className="relative z-[1] border-t border-[var(--border-subtle)] bg-[var(--bg-secondary)]">
+      <div className="container-custom py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Brand */}
+          <div className="md:col-span-1">
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center">
+                <Leaf className="w-4 h-4 text-[#060d06]" />
+              </div>
+              <span
+                className="text-lg font-bold"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
+                <span className="text-green-400">Flora</span>
+                <span className="text-[var(--accent-gold)]">Base</span>
+              </span>
+            </Link>
+            <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+              Your AI-powered botanical companion. Explore 10,000+ plant species
+              with care guides, growth predictions, and expert advice.
+            </p>
+          </div>
+
+          {/* Explore */}
+          <div>
+            <h4
+              className="text-sm font-semibold text-[var(--text-secondary)] mb-4 uppercase tracking-wider"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              Explore
+            </h4>
+            <ul className="space-y-2">
+              {[
+                { href: "/search", label: "Search Plants" },
+                { href: "/predictor", label: "Plant Predictor" },
+                { href: "/map", label: "Growth Map" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-[var(--text-muted)] hover:text-green-400 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h4
+              className="text-sm font-semibold text-[var(--text-secondary)] mb-4 uppercase tracking-wider"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              Resources
+            </h4>
+            <ul className="space-y-2">
+              {[
+                { href: "#", label: "Care Guides" },
+                { href: "#", label: "Disease Library" },
+                { href: "#", label: "Fertilizer Guide" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-[var(--text-muted)] hover:text-green-400 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* APIs */}
+          <div>
+            <h4
+              className="text-sm font-semibold text-[var(--text-secondary)] mb-4 uppercase tracking-wider"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              Powered By
+            </h4>
+            <ul className="space-y-2 text-sm text-[var(--text-muted)]">
+              <li>
+                <a
+                  href="https://perenual.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400 transition-colors"
+                >
+                  Perenual API
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://openweathermap.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400 transition-colors"
+                >
+                  OpenWeatherMap
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://ai.google.dev"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400 transition-colors"
+                >
+                  Google Gemini AI
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.openstreetmap.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400 transition-colors"
+                >
+                  OpenStreetMap
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 pt-6 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[var(--text-dim)] flex items-center gap-1">
+            Made with <Heart className="w-3 h-3 text-red-400 fill-red-400" />{" "}
+            for plant lovers everywhere
+          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--text-dim)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <Code className="w-4 h-4" />
+            </a>
+            <span className="text-xs text-[var(--text-dim)]">
+              © {new Date().getFullYear()} FloraBase
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
