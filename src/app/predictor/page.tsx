@@ -5,10 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Cloud, Droplets, Thermometer, Wind, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
 import PredictorForm from "@/components/predictor/PredictorForm";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/context/translations";
 import type { WeatherData, PredictorResult } from "@/types/plant";
 
 export default function PredictorPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const { language } = useLanguage();
   const [data, setData] = useState<{
     weather: WeatherData;
     season: string;
@@ -52,11 +55,10 @@ export default function PredictorPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{ fontFamily: "var(--font-heading)" }}>
-            Smart Plant <span className="text-[var(--accent-gold)]">Predictor</span>
+            {t(language, "smartPlantPredictor")} <span className="text-[var(--accent-gold)]">{t(language, "predictorHighlight")}</span>
           </h1>
           <p className="text-[var(--text-muted)] max-w-2xl mx-auto">
-            Our algorithm analyzes real-time weather data, local climate, and your planting environment 
-            to recommend the botanical species most likely to thrive.
+            {t(language, "predictorSubtitle")}
           </p>
         </div>
 
@@ -73,31 +75,31 @@ export default function PredictorPage() {
                 {/* Context Card (Weather/Season) */}
                 <div className="glass-card p-6">
                   <h3 className="text-lg font-semibold mb-4 border-b border-[var(--border-subtle)] pb-2" style={{ fontFamily: "var(--font-heading)" }}>
-                    Current Conditions in {data.weather.city || "your location"}
+                    {t(language, "currentConditions")} {data.weather.city || "your location"}
                   </h3>
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="flex flex-col">
                       <span className="text-sm text-[var(--text-muted)] flex items-center gap-1">
-                        <Thermometer className="w-3.5 h-3.5" /> Temp
+                        <Thermometer className="w-3.5 h-3.5" /> {t(language, "temp")}
                       </span>
                       <span className="text-xl font-bold text-red-400">{Math.round(data.weather.temp)}°C</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm text-[var(--text-muted)] flex items-center gap-1">
-                        <Droplets className="w-3.5 h-3.5 text-blue-400" /> Humidity
+                        <Droplets className="w-3.5 h-3.5 text-blue-400" /> {t(language, "humidity")}
                       </span>
                       <span className="text-xl font-bold text-blue-400">{data.weather.humidity}%</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm text-[var(--text-muted)] flex items-center gap-1">
-                        <Cloud className="w-3.5 h-3.5 text-gray-400" /> Clouds
+                        <Cloud className="w-3.5 h-3.5 text-gray-400" /> {t(language, "clouds")}
                       </span>
                       <span className="text-xl font-bold text-gray-400">{data.weather.clouds}%</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm text-[var(--text-muted)] flex items-center gap-1">
-                        Season
+                        {t(language, "season")}
                       </span>
                       <span className="text-xl font-bold text-[var(--accent-gold)] capitalize">{data.season}</span>
                     </div>
@@ -107,7 +109,7 @@ export default function PredictorPage() {
                 {/* Recommendations */}
                 <div>
                   <h3 className="text-xl font-bold mb-4" style={{ fontFamily: "var(--font-heading)" }}>
-                    Top Matches
+                    {t(language, "topMatches")}
                   </h3>
                   <div className="space-y-4">
                     {data.recommendations.map((rec, idx) => (
@@ -152,7 +154,7 @@ export default function PredictorPage() {
                             </div>
                             <div className="text-right">
                               <span className="text-2xl font-black text-green-400 block leading-none">{rec.score}</span>
-                              <span className="text-[0.6rem] text-[var(--text-muted)] uppercase tracking-wider">Match Score</span>
+                              <span className="text-[0.6rem] text-[var(--text-muted)] uppercase tracking-wider">{t(language, "matchScore")}</span>
                             </div>
                           </div>
 
@@ -168,7 +170,7 @@ export default function PredictorPage() {
 
                           <div className="mt-3 text-right">
                             <Link href={`/plant/${rec.plant.id}`} className="inline-flex items-center gap-1 text-sm text-green-400 font-medium hover:text-green-300 transition-colors">
-                              View full care guide <ArrowRight className="w-4 h-4" />
+                              {t(language, "viewCareGuide")} <ArrowRight className="w-4 h-4" />
                             </Link>
                           </div>
                         </div>
@@ -177,7 +179,7 @@ export default function PredictorPage() {
 
                     {data.recommendations.length === 0 && (
                       <div className="glass-card p-10 text-center text-[var(--text-muted)]">
-                        No strong matches found for these conditions. Try adjusting your parameters.
+                        {t(language, "noStrongMatches")}
                       </div>
                     )}
                   </div>
@@ -195,7 +197,7 @@ export default function PredictorPage() {
 
                 {data.region && (
                   <div className="mt-3 text-xs text-[var(--text-muted)] flex items-center gap-1">
-                    📍 Detected region: <span className="capitalize text-green-400 font-medium">{data.region}</span>
+                    📍 {t(language, "detectedRegion")}: <span className="capitalize text-green-400 font-medium">{data.region}</span>
                   </div>
                 )}
               </div>
@@ -204,9 +206,9 @@ export default function PredictorPage() {
                 <div className="w-20 h-20 rounded-full bg-[var(--bg-tertiary)] flex items-center justify-center mb-2">
                   <Sparkles className="w-8 h-8 text-[var(--text-dim)]" />
                 </div>
-                <h3 className="text-xl font-medium text-[var(--text-secondary)]" style={{ fontFamily: "var(--font-heading)" }}>Awaiting Input</h3>
+                <h3 className="text-xl font-medium text-[var(--text-secondary)]" style={{ fontFamily: "var(--font-heading)" }}>{t(language, "awaitingInput")}</h3>
                 <p className="text-[var(--text-muted)] max-w-sm">
-                  Fill out the form to generate a personalized list of plants that will thrive in your specific conditions.
+                  {t(language, "awaitingInputDesc")}
                 </p>
               </div>
             )}

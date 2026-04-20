@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Leaf,
@@ -14,55 +16,59 @@ import {
   Bot,
 } from "lucide-react";
 import SearchBar from "@/components/search/SearchBar";
-
-const categories = [
-  { icon: TreePine, label: "Trees", query: "tree", color: "text-emerald-400" },
-  { icon: Flower2, label: "Flowers", query: "flower", color: "text-pink-400" },
-  { icon: Sprout, label: "Herbs", query: "herb", color: "text-lime-400" },
-  { icon: Apple, label: "Fruits", query: "fruit", color: "text-orange-400" },
-  { icon: Leaf, label: "Ferns", query: "fern", color: "text-green-400" },
-  { icon: Droplets, label: "Aquatic", query: "aquatic", color: "text-cyan-400" },
-];
-
-const features = [
-  {
-    icon: Search,
-    title: "Smart Search",
-    description: "Multi-language plant search across 10,000+ species with instant autocomplete.",
-    color: "from-green-500/20 to-emerald-500/20",
-    borderColor: "border-green-500/20",
-  },
-  {
-    icon: Sparkles,
-    title: "AI Predictor",
-    description: "Get personalized plant recommendations based on your location, date, and environment.",
-    color: "from-amber-500/20 to-yellow-500/20",
-    borderColor: "border-amber-500/20",
-  },
-  {
-    icon: MapPin,
-    title: "Growth Maps",
-    description: "Interactive maps showing natural growth regions and local plant viability.",
-    color: "from-blue-500/20 to-cyan-500/20",
-    borderColor: "border-blue-500/20",
-  },
-  {
-    icon: Bot,
-    title: "AI Assistant",
-    description: "Voice-enabled chatbot for instant plant care advice powered by Gemini AI.",
-    color: "from-purple-500/20 to-violet-500/20",
-    borderColor: "border-purple-500/20",
-  },
-];
-
-const stats = [
-  { value: "10,000+", label: "Plant Species" },
-  { value: "200+", label: "Disease Records" },
-  { value: "30+", label: "Regions Covered" },
-  { value: "24/7", label: "AI Assistance" },
-];
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/context/translations";
 
 export default function HomePage() {
+  const { language } = useLanguage();
+
+  const categories = [
+    { icon: TreePine, label: t(language, "trees"), query: "tree", color: "text-emerald-400" },
+    { icon: Flower2, label: t(language, "flowers"), query: "flower", color: "text-pink-400" },
+    { icon: Sprout, label: t(language, "herbs"), query: "herb", color: "text-lime-400" },
+    { icon: Apple, label: t(language, "fruits"), query: "fruit", color: "text-orange-400" },
+    { icon: Leaf, label: t(language, "ferns"), query: "fern", color: "text-green-400" },
+    { icon: Droplets, label: t(language, "aquatic"), query: "aquatic", color: "text-cyan-400" },
+  ];
+
+  const features = [
+    {
+      icon: Search,
+      title: t(language, "smartSearch"),
+      description: t(language, "smartSearchDesc"),
+      color: "from-green-500/20 to-emerald-500/20",
+      borderColor: "border-green-500/20",
+    },
+    {
+      icon: Sparkles,
+      title: t(language, "aiPredictor"),
+      description: t(language, "aiPredictorDesc"),
+      color: "from-amber-500/20 to-yellow-500/20",
+      borderColor: "border-amber-500/20",
+    },
+    {
+      icon: MapPin,
+      title: t(language, "growthMaps"),
+      description: t(language, "growthMapsDesc"),
+      color: "from-blue-500/20 to-cyan-500/20",
+      borderColor: "border-blue-500/20",
+    },
+    {
+      icon: Bot,
+      title: t(language, "aiAssistant"),
+      description: t(language, "aiAssistantDesc"),
+      color: "from-purple-500/20 to-violet-500/20",
+      borderColor: "border-purple-500/20",
+    },
+  ];
+
+  const stats = [
+    { value: "10,000+", label: t(language, "plantSpecies") },
+    { value: "200+", label: t(language, "diseaseRecords") },
+    { value: "30+", label: t(language, "regionsCovered") },
+    { value: "24/7", label: t(language, "aiAssistance") },
+  ];
+
   return (
     <div className="relative">
       {/* ============ HERO SECTION ============ */}
@@ -79,7 +85,7 @@ export default function HomePage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-400/10 border border-green-400/20 mb-8 animate-fade-in">
             <Leaf className="w-4 h-4 text-green-400" />
             <span className="text-sm text-green-400 font-medium">
-              AI-Powered Plant Encyclopedia
+              {t(language, "aiBadge")}
             </span>
           </div>
 
@@ -92,9 +98,9 @@ export default function HomePage() {
               animationFillMode: "backwards",
             }}
           >
-            <span className="text-[var(--text-primary)]">Discover the </span>
+            <span className="text-[var(--text-primary)]">{t(language, "heroTitle1")}</span>
             <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-lime-400 bg-clip-text text-transparent">
-              World of Plants
+              {t(language, "heroTitle2")}
             </span>
           </h1>
 
@@ -103,8 +109,7 @@ export default function HomePage() {
             className="text-lg md:text-xl text-[var(--text-muted)] max-w-2xl mx-auto mb-10 animate-slide-up"
             style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}
           >
-            Explore 10,000+ species with care guides, growth predictions,
-            disease solutions, and AI-powered assistance — all in one place.
+            {t(language, "heroSubtitle")}
           </p>
 
           {/* Search Bar */}
@@ -122,11 +127,11 @@ export default function HomePage() {
           >
             <Link href="/predictor" className="btn-gold">
               <Sparkles className="w-4 h-4" />
-              Find Best Plant
+              {t(language, "findBestPlant")}
             </Link>
             <Link href="/search" className="btn-secondary">
               <Database className="w-4 h-4" />
-              Browse All
+              {t(language, "browseAll")}
             </Link>
           </div>
         </div>
@@ -166,9 +171,9 @@ export default function HomePage() {
       <section className="py-20">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="section-title">Explore by Category</h2>
+            <h2 className="section-title">{t(language, "exploreByCategory")}</h2>
             <p className="section-subtitle mx-auto">
-              Browse through our extensive collection organized by plant type
+              {t(language, "categorySubtitle")}
             </p>
           </div>
 
@@ -177,7 +182,7 @@ export default function HomePage() {
               const Icon = cat.icon;
               return (
                 <Link
-                  key={cat.label}
+                  key={cat.query}
                   href={`/search?q=${cat.query}`}
                   className="glass-card p-6 text-center group"
                 >
@@ -201,9 +206,9 @@ export default function HomePage() {
       <section className="py-20 bg-[var(--bg-secondary)]/50">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="section-title">Powerful Features</h2>
+            <h2 className="section-title">{t(language, "powerfulFeatures")}</h2>
             <p className="section-subtitle mx-auto">
-              Everything you need to grow, care for, and understand plants
+              {t(language, "featuresSubtitle")}
             </p>
           </div>
 
@@ -248,15 +253,14 @@ export default function HomePage() {
                 className="text-3xl md:text-4xl font-bold mb-4"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Not sure what to plant?
+                {t(language, "notSure")}
               </h2>
               <p className="text-[var(--text-muted)] text-lg mb-8 max-w-xl mx-auto">
-                Our AI-powered predictor analyzes your location, climate, and
-                preferences to suggest the perfect plants for you.
+                {t(language, "notSureDesc")}
               </p>
               <Link href="/predictor" className="btn-primary text-lg px-8 py-4">
                 <Sparkles className="w-5 h-5" />
-                Try Plant Predictor
+                {t(language, "tryPredictor")}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>

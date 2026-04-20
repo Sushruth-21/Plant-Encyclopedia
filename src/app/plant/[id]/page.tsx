@@ -29,6 +29,8 @@ import GrowthCalculator from "@/components/plant/GrowthCalculator";
 import MarketSection from "@/components/plant/MarketSection";
 import MapWrapper from "@/components/map/MapWrapper";
 import ImageCarousel from "@/components/plant/ImageCarousel";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/context/translations";
 
 interface PlantData {
   id: number;
@@ -79,6 +81,7 @@ export default function PlantPage() {
     new Set(["watering", "sunlight"])
   );
   const [imgError, setImgError] = useState(false);
+  const { language } = useLanguage();
 
   useEffect(() => {
     async function fetchPlant() {
@@ -126,10 +129,10 @@ export default function PlantPage() {
         <div className="text-center">
           <div className="text-5xl mb-4">🥀</div>
           <h2 className="text-xl font-semibold mb-2" style={{ fontFamily: "var(--font-heading)" }}>
-            {error || "Plant not found"}
+           {error || t(language, "plantNotFound")}
           </h2>
           <Link href="/search" className="btn-secondary mt-4">
-            <ArrowLeft className="w-4 h-4" /> Back to search
+            <ArrowLeft className="w-4 h-4" /> {t(language, "backToSearch")}
           </Link>
         </div>
       </div>
@@ -145,7 +148,7 @@ export default function PlantPage() {
     {
       key: "watering",
       icon: Droplets,
-      title: "Watering",
+      title: t(language, "watering"),
       color: "text-blue-400",
       summary: `${plant.watering}${plant.watering_general_benchmark ? ` — every ${plant.watering_general_benchmark.value} ${plant.watering_general_benchmark.unit}` : ""}`,
       detail: careGuideMap.get("watering"),
@@ -153,7 +156,7 @@ export default function PlantPage() {
     {
       key: "sunlight",
       icon: Sun,
-      title: "Sunlight",
+      title: t(language, "sunlight"),
       color: "text-yellow-400",
       summary: plant.sunlight?.join(", ") || "Not specified",
       detail: careGuideMap.get("sunlight"),
@@ -161,14 +164,14 @@ export default function PlantPage() {
     {
       key: "soil",
       icon: Layers,
-      title: "Soil",
+      title: t(language, "soil"),
       color: "text-amber-600",
       summary: plant.soil?.join(", ") || "Not specified",
     },
     {
       key: "pruning",
       icon: Scissors,
-      title: "Pruning",
+      title: t(language, "pruning"),
       color: "text-emerald-400",
       summary: plant.pruning_month?.length > 0
         ? `Best months: ${plant.pruning_month.join(", ")}`
@@ -178,7 +181,7 @@ export default function PlantPage() {
     {
       key: "hardiness",
       icon: Thermometer,
-      title: "Hardiness Zone",
+      title: t(language, "hardinessZone"),
       color: "text-red-400",
       summary: plant.hardiness
         ? `Zone ${plant.hardiness.min} — ${plant.hardiness.max}`
@@ -224,7 +227,7 @@ export default function PlantPage() {
             href="/search"
             className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-green-400 mb-4 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to search
+            <ArrowLeft className="w-4 h-4" /> {t(language, "backToSearch")}
           </Link>
           <h1
             className="text-3xl md:text-5xl font-bold mb-2"
@@ -258,7 +261,7 @@ export default function PlantPage() {
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
                   <Leaf className="w-5 h-5 text-green-400" />
-                  About
+                  {t(language, "about")}
                 </h2>
                 <p className="text-[var(--text-secondary)] leading-relaxed">
                   {plant.description}
@@ -273,7 +276,7 @@ export default function PlantPage() {
                 style={{ fontFamily: "var(--font-heading)" }}
               >
                 <Heart className="w-5 h-5 text-pink-400" />
-                Care Instructions
+                {t(language, "careInstructions")}
               </h2>
               <div className="space-y-3">
                 {careItems.map((item) => {
@@ -329,7 +332,7 @@ export default function PlantPage() {
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
                   <Bug className="w-5 h-5 text-red-400" />
-                  Health & Disease Susceptibility
+                  {t(language, "healthDisease")}
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {plant.pest_susceptibility.map((pest) => (
@@ -353,7 +356,7 @@ export default function PlantPage() {
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
                   <MapPin className="w-5 h-5 text-blue-400" />
-                  Natural Growth Regions
+                  {t(language, "naturalGrowthRegions")}
                 </h2>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {plant.origin.map((o) => (
@@ -376,16 +379,16 @@ export default function PlantPage() {
                 className="text-lg font-semibold mb-4"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Botanical Data
+                {t(language, "botanicalData")}
               </h3>
               <dl className="space-y-3">
                 {[
-                  { label: "Family", value: plant.family },
-                  { label: "Type", value: plant.type },
-                  { label: "Cycle", value: plant.cycle },
-                  { label: "Origin", value: plant.origin?.join(", ") },
-                  { label: "Growth Rate", value: plant.growth_rate },
-                  { label: "Maintenance", value: plant.maintenance },
+                  { label: t(language, "family"), value: plant.family },
+                  { label: t(language, "type"), value: plant.type },
+                  { label: t(language, "cycle"), value: plant.cycle },
+                  { label: t(language, "origin"), value: plant.origin?.join(", ") },
+                  { label: t(language, "growthRate"), value: plant.growth_rate },
+                  { label: t(language, "maintenance"), value: plant.maintenance },
                 ].map(
                   (item) =>
                     item.value && (
@@ -406,14 +409,14 @@ export default function PlantPage() {
                 className="text-lg font-semibold mb-4"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Quick Facts
+                {t(language, "quickFacts")}
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: "🌸", label: "Flowers", value: plant.flowers ? "Yes" : "No" },
-                  { icon: "🍎", label: "Fruits", value: plant.fruits ? "Yes" : "No" },
-                  { icon: "🌡️", label: "Zones", value: plant.hardiness ? `${plant.hardiness.min}-${plant.hardiness.max}` : "—" },
-                  { icon: "🏠", label: "Indoor", value: plant.indoor ? "Yes" : "No" },
+                  { icon: "🌸", label: t(language, "flowersLabel"), value: plant.flowers ? t(language, "yes") : t(language, "no") },
+                  { icon: "🍎", label: t(language, "fruitsLabel"), value: plant.fruits ? t(language, "yes") : t(language, "no") },
+                  { icon: "🌡️", label: t(language, "zones"), value: plant.hardiness ? `${plant.hardiness.min}-${plant.hardiness.max}` : "—" },
+                  { icon: "🏠", label: t(language, "indoor"), value: plant.indoor ? t(language, "yes") : t(language, "no") },
                 ].map((fact) => (
                   <div
                     key={fact.label}
@@ -436,7 +439,7 @@ export default function PlantPage() {
                   className="text-lg font-semibold mb-3"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  Propagation
+                {t(language, "propagation")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {plant.propagation.map((p) => (
@@ -453,7 +456,7 @@ export default function PlantPage() {
                   className="text-lg font-semibold mb-3"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  Attracts
+                {t(language, "attracts")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {plant.attracts.map((a) => (

@@ -5,12 +5,15 @@ import { useSearchParams } from "next/navigation";
 import { Loader2, LayoutGrid, List } from "lucide-react";
 import SearchBar from "@/components/search/SearchBar";
 import PlantCard from "@/components/search/PlantCard";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/context/translations";
 import type { PlantListItem } from "@/types/plant";
 
 function SearchContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const lang = searchParams.get("lang") || "English";
+  const { language } = useLanguage();
 
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<PlantListItem[]>([]);
@@ -105,10 +108,10 @@ function SearchContent() {
             className="text-3xl md:text-4xl font-bold mb-4"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Explore Plants
+            {t(language, "explorePlants")}
           </h1>
           <p className="text-[var(--text-muted)] mb-6">
-            Search through our database of 10,000+ plant species
+            {t(language, "searchSubtitle")}
           </p>
           <SearchBar />
         </div>
@@ -117,7 +120,7 @@ function SearchContent() {
         {results.length > 0 && (
           <div className="flex items-center justify-between mb-6">
             <p className="text-sm text-[var(--text-muted)]">
-              Showing results for &ldquo;{query}&rdquo;
+              {t(language, "showingResults")} &ldquo;{query}&rdquo;
             </p>
             <div className="flex items-center gap-2">
               <button
@@ -173,12 +176,12 @@ function SearchContent() {
               {hasMore && isLoading && (
                 <div className="flex flex-col items-center gap-2">
                   <Loader2 className="w-6 h-6 text-green-400 animate-spin" />
-                  <span className="text-xs text-[var(--text-muted)] animate-pulse">Loading more plants...</span>
+                  <span className="text-xs text-[var(--text-muted)] animate-pulse">{t(language, "loadingMore")}</span>
                 </div>
               )}
               {!hasMore && results.length > 0 && (
                 <p className="text-sm text-[var(--text-dim)] italic">
-                  — You&apos;ve reached the end of the garden —
+                  {t(language, "endOfGarden")}
                 </p>
               )}
             </div>
@@ -193,10 +196,10 @@ function SearchContent() {
               className="text-xl font-semibold mb-2"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              No plants found
+              {t(language, "noPlantsFound")}
             </h3>
             <p className="text-[var(--text-muted)]">
-              Try a different search term or browse categories on the home page.
+              {t(language, "noPlantsHint")}
             </p>
           </div>
         )}
@@ -209,10 +212,10 @@ function SearchContent() {
               className="text-xl font-semibold mb-2"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              Start exploring
+              {t(language, "startExploring")}
             </h3>
             <p className="text-[var(--text-muted)]">
-              Search for any plant by common name, scientific name, or family.
+              {t(language, "startExploringHint")}
             </p>
           </div>
         )}

@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { Leaf, Code, Heart } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/context/translations";
 
 export default function Footer() {
+  const { language } = useLanguage();
+
   return (
     <footer className="relative z-[1] border-t border-[var(--border-subtle)] bg-[var(--bg-secondary)]">
       <div className="container-custom py-12">
@@ -21,8 +27,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm text-[var(--text-muted)] leading-relaxed">
-              Your AI-powered botanical companion. Explore 10,000+ plant species
-              with care guides, growth predictions, and expert advice.
+              {t(language, "footerDesc")}
             </p>
           </div>
 
@@ -32,13 +37,13 @@ export default function Footer() {
               className="text-sm font-semibold text-[var(--text-secondary)] mb-4 uppercase tracking-wider"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              Explore
+              {t(language, "explore")}
             </h4>
             <ul className="space-y-2">
               {[
-                { href: "/search", label: "Search Plants" },
-                { href: "/predictor", label: "Plant Predictor" },
-                { href: "/map", label: "Growth Map" },
+                { href: "/search", label: t(language, "searchPlants") },
+                { href: "/predictor", label: t(language, "plantPredictor") },
+                { href: "/map", label: t(language, "growthMap") },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -58,13 +63,13 @@ export default function Footer() {
               className="text-sm font-semibold text-[var(--text-secondary)] mb-4 uppercase tracking-wider"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              Resources
+              {t(language, "resources")}
             </h4>
             <ul className="space-y-2">
               {[
-                { href: "#", label: "Care Guides" },
-                { href: "#", label: "Disease Library" },
-                { href: "#", label: "Fertilizer Guide" },
+                { href: "#", label: t(language, "careGuides") },
+                { href: "#", label: t(language, "diseaseLibrary") },
+                { href: "#", label: t(language, "fertilizerGuide") },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -84,7 +89,7 @@ export default function Footer() {
               className="text-sm font-semibold text-[var(--text-secondary)] mb-4 uppercase tracking-wider"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              Powered By
+              {t(language, "poweredBy")}
             </h4>
             <ul className="space-y-2 text-sm text-[var(--text-muted)]">
               <li>
@@ -134,8 +139,8 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[var(--text-dim)] flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-red-400 fill-red-400" />{" "}
-            for plant lovers everywhere
+            {t(language, "madeWith")} <Heart className="w-3 h-3 text-red-400 fill-red-400" />{" "}
+            {t(language, "forPlantLovers")}
           </p>
           <div className="flex items-center gap-4">
             <a

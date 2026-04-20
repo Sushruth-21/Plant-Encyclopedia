@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Calculator, Calendar, MapPin, TrendingUp, Loader2, AlertCircle } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/context/translations";
 
 interface Props {
   plant: {
@@ -14,6 +16,7 @@ interface Props {
 }
 
 export default function GrowthCalculator({ plant }: Props) {
+  const { language } = useLanguage();
   const [plantingDate, setPlantingDate] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const [isCalculating, setIsCalculating] = useState(false);
@@ -138,14 +141,14 @@ export default function GrowthCalculator({ plant }: Props) {
         style={{ fontFamily: "var(--font-heading)" }}
       >
         <Calculator className="w-5 h-5 text-green-400" />
-        Growth Prediction Calculator
+        {t(language, "growthPrediction")}
       </h2>
 
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-sm text-[var(--text-muted)] mb-1.5">
             <Calendar className="w-3.5 h-3.5 inline mr-1" />
-            Planting Date
+            {t(language, "plantingDate")}
           </label>
           <input
             type="date"
@@ -158,7 +161,7 @@ export default function GrowthCalculator({ plant }: Props) {
         <div>
           <label className="block text-sm text-[var(--text-muted)] mb-1.5">
             <MapPin className="w-3.5 h-3.5 inline mr-1" />
-            Region
+            {t(language, "region")}
           </label>
           <input
             type="text"
@@ -182,7 +185,7 @@ export default function GrowthCalculator({ plant }: Props) {
         ) : (
           <TrendingUp className="w-4 h-4" />
         )}
-        {isCalculating ? "Calculating..." : "Predict Growth"}
+        {isCalculating ? t(language, "calculating") : t(language, "predictGrowth")}
       </button>
 
       {/* Error Message */}
@@ -223,7 +226,7 @@ export default function GrowthCalculator({ plant }: Props) {
                   </span>
                 </div>
               </div>
-              <div className="text-xs text-[var(--text-muted)]">Success Rate</div>
+              <div className="text-xs text-[var(--text-muted)]">{t(language, "successRate")}</div>
             </div>
 
             {/* Duration */}
@@ -231,23 +234,23 @@ export default function GrowthCalculator({ plant }: Props) {
               <div className="text-3xl font-bold text-[var(--accent-gold)] mb-1" style={{ fontFamily: "var(--font-heading)" }}>
                 {result.harvestDays}
               </div>
-              <div className="text-xs text-[var(--text-muted)]">Days to Harvest</div>
+              <div className="text-xs text-[var(--text-muted)]">{t(language, "daysToHarvest")}</div>
             </div>
           </div>
 
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-[var(--text-muted)]">Season</span>
+              <span className="text-[var(--text-muted)]">{t(language, "season")}</span>
               <span className="text-[var(--text-primary)]">{result.season}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[var(--text-muted)]">Est. Harvest</span>
+              <span className="text-[var(--text-muted)]">{t(language, "estHarvest")}</span>
               <span className="text-[var(--text-primary)]">{result.harvestDate}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[var(--text-muted)]">Weather Match</span>
+              <span className="text-[var(--text-muted)]">{t(language, "weatherMatch")}</span>
               <span className={result.weatherMatch ? "text-green-400" : "text-yellow-400"}>
-                {result.weatherMatch ? "✓ Favorable" : "⚠ Marginal"}
+                {result.weatherMatch ? t(language, "favorable") : t(language, "marginal")}
               </span>
             </div>
           </div>
