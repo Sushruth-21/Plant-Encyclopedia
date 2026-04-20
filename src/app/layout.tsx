@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ChatBubble from "@/components/chat/ChatBubble";
+import AgriMitraWidget from "@/components/chat/AgriMitraWidget";
 import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({
@@ -69,6 +70,7 @@ export default function RootLayout({
           <main className="flex-1 relative z-[1]">{children}</main>
           <Footer />
           <ChatBubble />
+          <AgriMitraWidget />
         </LanguageProvider>
       </body>
     </html>

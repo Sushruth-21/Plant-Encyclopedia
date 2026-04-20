@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriMitra Widget</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Noto+Sans+Devanagari:wght@400&display=swap" rel="stylesheet"/>
+</head>
+<body style="background:#f0f7f0; min-height:100vh; display:flex; align-items:center; justify-content:center;">
+
+  <p style="font-family:sans-serif; color:#555;">Your website content here. AgriMitra button is fixed bottom-right ↘</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!--   AgriMitra AI Voice Widget  v4                 -->
+<!--   Paste this entire block before </body>        -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- WIDGET HTML -->
+<div id="agrimitra-widget">
+  <div id="agri-status-card">
+    <div class="agri-status-row">
+      <span class="agri-dot" id="agri-dot"></span>
+      <span id="agri-status-text">Connecting...</span>
+      <div class="agri-waves" id="agri-waves">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div id="agri-status-sub">Please wait</div>
+  </div>
+
+  <button id="agri-btn" onclick="agriStartCall()">
+    <span class="agri-btn-icon">🌾</span>
+    <span class="agri-btn-text">
+      <b id="agri-btn-label">Ask AgriMitra</b>
+      <small>अभी बात करें · ಮಾತನಾಡಿ</small>
+    </span>
+  </button>
+</div>
+
+<!-- STYLES -->
+<style>
+  #agrimitra-widget {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    font-family: 'Sora', sans-serif;
+  }
+  #agri-status-card {
+    display: none;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    min-width: 230px;
+    animation: agri-slide-up 0.3s ease;
+  }
+  @keyframes agri-slide-up {
+    from { opacity:0; transform:translateY(10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .agri-status-row {
+    display: flex; align-items: center;
+    gap: 9px; font-size: 13px;
+    font-weight: 600; color: #2d3748;
+  }
+  .agri-dot {
+    width:10px; height:10px; border-radius:50%;
+    background:#56ab2f; flex-shrink:0;
+    transition: background 0.3s;
+  }
+  .agri-dot.pulse { animation: agri-dot-pulse 1.2s infinite; }
+  @keyframes agri-dot-pulse {
+    0%,100%{ opacity:1; } 50%{ opacity:0.2; }
+  }
+  #agri-status-sub { font-size:11px; color:#aaa; margin-top:4px; padding-left:19px; }
+  .agri-waves { display:none; align-items:center; gap:3px; height:18px; }
+  .agri-waves span {
+    display:block; width:3px; background:#56ab2f;
+    border-radius:3px; animation:agri-wave 1s ease-in-out infinite;
+  }
+  .agri-waves span:nth-child(1){height:5px;  animation-delay:0s;}
+  .agri-waves span:nth-child(2){height:12px; animation-delay:0.1s;}
+  .agri-waves span:nth-child(3){height:9px;  animation-delay:0.2s;}
+  .agri-waves span:nth-child(4){height:16px; animation-delay:0.3s;}
+  .agri-waves span:nth-child(5){height:7px;  animation-delay:0.4s;}
+  @keyframes agri-wave {
+    0%,100%{ transform:scaleY(0.5); opacity:0.5; }
+    50%    { transform:scaleY(1.4); opacity:1; }
+  }
+  #agri-btn {
+    display:flex; align-items:center; gap:12px;
+    background: linear-gradient(135deg, #2d7a3a 0%, #56ab2f 100%);
+    color:#fff; border:none; border-radius:60px;
+    padding:14px 24px; font-family:'Sora',sans-serif;
+    cursor:pointer; box-shadow:0 6px 24px rgba(86,171,47,0.45);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  #agri-btn:hover { transform:translateY(-3px); box-shadow:0 10px 32px rgba(86,171,47,0.55); }
+  #agri-btn.loading   { background:linear-gradient(135deg,#888,#aaa); cursor:wait; box-shadow:none; }
+  #agri-btn.ringing   { background:linear-gradient(135deg,#1b5e20,#388e3c); animation:agri-ring 1.2s infinite; }
+  #agri-btn.connected { background:linear-gradient(135deg,#1565c0,#1976d2); box-shadow:0 6px 24px rgba(25,118,210,0.4); animation:none; }
+  #agri-btn.ending    { background:linear-gradient(135deg,#b71c1c,#e53935); animation:none; }
+  @keyframes agri-ring {
+    0%  { box-shadow:0 0 0 0    rgba(56,142,60,0.6); }
+    50% { box-shadow:0 0 0 16px rgba(56,142,60,0);   }
+    100%{ box-shadow:0 0 0 0    rgba(56,142,60,0);   }
+  }
+  .agri-btn-icon {
+    width:32px; height:32px; background:rgba(255,255,255,0.2);
+    border-radius:50%; display:flex; align-items:center;
+    justify-content:center; font-size:17px; flex-shrink:0;
+  }
+  .agri-btn-text { display:flex; flex-direction:column; align-items:flex-start; line-height:1.25; }
+  .agri-btn-text b     { font-size:14px; font-weight:700; }
+  .agri-btn-text small { font-size:10px; opacity:0.85; font-family:'Noto Sans Devanagari',sans-serif; }
+  @media(max-width:480px){
+    #agrimitra-widget { bottom:16px; right:16px; }
+    #agri-btn { padding:12px 18px; }
+  }
+</style>
+
+<!-- VAPI LOGIC — uses esm.sh for browser-compatible import -->
+<script type="module">
+
+  /* ── Your credentials ── */
+  const PUBLIC_KEY   = "8cc4141a-540c-426d-b7fa-51e80bd9ee50";
+  const ASSISTANT_ID = "83e1c622-b273-45f0-ac20-54ff4aa395c4";
+
+  /* ── Import Vapi as a proper ES module (browser safe) ── */
+  let vapi = null;
+  let callActive = false;
+
+  try {
+    const { default: Vapi } = await import("https://esm.sh/@vapi-ai/web");
+    vapi = new Vapi(PUBLIC_KEY);
+    console.log("AgriMitra ✅ VAPI ready");
+
+    /* ── Events ── */
+    vapi.on("call-start",   () => { callActive = true;  setState("connected", "Connected!", "Ask your farming question...", true); });
+    vapi.on("speech-start", () => setState("connected", "AgriMitra is speaking...", "Please listen", true));
+    vapi.on("speech-end",   () => setState("connected", "Listening to you...", "Speak your question", true));
+    vapi.on("call-end",     () => { callActive = false; setState("ending", "Call ended", "Have a great farming day! 🌱", false); setTimeout(reset, 4000); });
+    vapi.on("error",        (e) => { callActive = false; setState("ending", "Error", e?.message || "Please try again", false); setTimeout(reset, 4000); });
+
+  } catch (e) {
+    console.error("AgriMitra ❌ Failed to load VAPI:", e);
+  }
+
+  /* ── Expose start function to the button's onclick ── */
+  window.agriStartCall = async function () {
+
+    /* End call if active */
+    if (callActive) {
+      vapi.stop();
+      return;
+    }
+
+    /* SDK not loaded */
+    if (!vapi) {
+      showStatus();
+      setState("ending", "Could not load AgriMitra", "Please refresh the page", false);
+      setTimeout(reset, 4000);
+      return;
+    }
+
+    /* Start call */
+    showStatus();
+    setState("ringing", "Connecting to AgriMitra...", "Please allow microphone access", false);
+
+    try {
+      await vapi.start(ASSISTANT_ID);
+    } catch (err) {
+      setState("ending", "Could not connect", err?.message || "Please try again", false);
+      setTimeout(reset, 4000);
+    }
+  };
+
+  /* ── Helpers ── */
+  function showStatus() {
+    document.getElementById("agri-status-card").style.display = "block";
+  }
+
+  function setState(state, text, sub, showWave) {
+    const btn  = document.getElementById("agri-btn");
+    const dot  = document.getElementById("agri-dot");
+    const lbl  = document.getElementById("agri-btn-label");
+    const stxt = document.getElementById("agri-status-text");
+    const ssub = document.getElementById("agri-status-sub");
+    const wave = document.getElementById("agri-waves");
+
+    btn.className = state;
+    dot.className = "agri-dot";
+    dot.style.background = "";
+
+    if      (state === "ringing")   { dot.classList.add("pulse"); lbl.textContent = "Connecting..."; }
+    else if (state === "connected") { lbl.textContent = "Tap to End Call"; dot.style.background = "#1976d2"; }
+    else if (state === "ending")    { lbl.textContent = "Ending...";       dot.style.background = "#e53935"; }
+
+    stxt.textContent   = text;
+    ssub.textContent   = sub;
+    wave.style.display = showWave ? "flex" : "none";
+  }
+
+  function reset() {
+    callActive = false;
+    document.getElementById("agri-status-card").style.display = "none";
+    document.getElementById("agri-btn").className = "";
+    document.getElementById("agri-btn-label").textContent = "Ask AgriMitra";
+    const dot = document.getElementById("agri-dot");
+    dot.className = "agri-dot";
+    dot.style.background = "#56ab2f";
+    document.getElementById("agri-waves").style.display = "none";
+  }
+
+</script>
+
+</body>
+</html>

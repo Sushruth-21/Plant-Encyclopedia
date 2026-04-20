@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calculator, Calendar, MapPin, TrendingUp, Loader2 } from "lucide-react";
-import regions from "@/data/regions.json";
+import { Calculator, Calendar, MapPin, TrendingUp, Loader2, AlertCircle } from "lucide-react";
 
 interface Props {
   plant: {
@@ -25,31 +24,37 @@ export default function GrowthCalculator({ plant }: Props) {
     weatherMatch: boolean;
     season: string;
   } | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleCalculate = async () => {
     if (!plantingDate || !selectedRegion) return;
 
     setIsCalculating(true);
-    const region = regions.find((r) => r.name === selectedRegion);
-    if (!region) return;
+    setErrorMsg(null);
+    setResult(null);
 
     try {
-      // Fetch weather for the region
+      // Fetch weather for the free-text region
       const weatherRes = await fetch(
-        `/api/weather?lat=${region.lat}&lon=${region.lon}`
+        `/api/weather?city=${encodeURIComponent(selectedRegion)}`
       );
 
-      let weatherData = null;
-      if (weatherRes.ok) {
-        weatherData = await weatherRes.json();
+      if (!weatherRes.ok) {
+        throw new Error("Could not find weather data for this location.");
+      }
+
+      const weatherData = await weatherRes.json();
+      
+      if (!weatherData.lat && weatherData.lat !== 0) {
+        throw new Error("Invalid location format.");
       }
 
       // Calculate based on plant data
       const date = new Date(plantingDate);
       const month = date.getMonth();
 
-      // Determine season
-      const isNorthern = region.lat >= 0;
+      // Determine season from weather coordinate
+      const isNorthern = weatherData.lat >= 0;
       let season: string;
       if (isNorthern) {
         if (month >= 2 && month <= 4) season = "Spring";
@@ -73,16 +78,35 @@ export default function GrowthCalculator({ plant }: Props) {
       if (plant.cycle === "Biennial") harvestDays = Math.max(harvestDays, 365);
       if (plant.cycle === "Perennial") harvestDays = Math.max(harvestDays, 180);
 
-      // Success rate
-      let successRate = 50;
-      const weatherMatch = weatherData ? weatherData.temp >= 10 && weatherData.temp <= 35 : false;
-      if (weatherMatch) successRate += 15;
-      if (season === "Spring" || season === "Summer") successRate += 15;
-      if (plant.hardiness) {
-        const zoneMin = parseInt(plant.hardiness.min);
-        if (zoneMin <= 10) successRate += 10;
+      // Strict Success Rate Calculation
+      let successRate = 20; // Base score
+      let weatherMatch = false;
+
+      // Judge by current temperature context
+      if (weatherData.temp >= 15 && weatherData.temp <= 30) {
+        successRate += 40; // Optimal temp
+        weatherMatch = true;
+      } else if (weatherData.temp >= 5 && weatherData.temp < 15) {
+        successRate += 10; // Cool, but tolerable
+      } else if (weatherData.temp > 30 && weatherData.temp <= 35) {
+        successRate += 10; // Hot, but tolerable
+      } else {
+        successRate -= 20; // Extreme weather penalty (frost or heat wave)
       }
-      successRate = Math.min(successRate, 95);
+
+      // Season bonuses
+      if (season === "Spring") successRate += 20;
+      else if (season === "Summer" || season === "Autumn") successRate += 10;
+      else if (season === "Winter") successRate -= 10; // Winter penalty
+
+      // Optional hardiness bonus
+      if (plant.hardiness && plant.hardiness.min) {
+        const zoneMin = parseInt(plant.hardiness.min);
+        if (!isNaN(zoneMin)) successRate += 10;
+      }
+
+      // Constrain score strictly between 0 and 100
+      successRate = Math.max(0, Math.min(successRate, 100));
 
       // Calculate harvest date
       const harvestDate = new Date(date);
@@ -99,8 +123,9 @@ export default function GrowthCalculator({ plant }: Props) {
         weatherMatch,
         season,
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error("Calculation error:", err);
+      setErrorMsg(err.message || "Failed to calculate growth parameters.");
     } finally {
       setIsCalculating(false);
     }
@@ -135,19 +160,14 @@ export default function GrowthCalculator({ plant }: Props) {
             <MapPin className="w-3.5 h-3.5 inline mr-1" />
             Region
           </label>
-          <select
+          <input
+            type="text"
             value={selectedRegion}
             onChange={(e) => setSelectedRegion(e.target.value)}
+            placeholder="e.g. London, Mumbai, Tokyo"
             className="input-field"
             id="planting-region"
-          >
-            <option value="">Select a region</option>
-            {regions.map((r) => (
-              <option key={r.name} value={r.name}>
-                {r.name}, {r.country}
-              </option>
-            ))}
-          </select>
+          />
         </div>
       </div>
 
@@ -164,6 +184,14 @@ export default function GrowthCalculator({ plant }: Props) {
         )}
         {isCalculating ? "Calculating..." : "Predict Growth"}
       </button>
+
+      {/* Error Message */}
+      {errorMsg && (
+        <div className="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2 text-red-400">
+          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <p className="text-sm">{errorMsg}</p>
+        </div>
+      )}
 
       {/* Results */}
       {result && (

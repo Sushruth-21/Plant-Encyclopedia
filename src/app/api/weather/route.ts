@@ -40,6 +40,8 @@ export async function GET(request: NextRequest) {
       country: data.sys.country,
       rain: data.rain?.['1h'] || 0,
       clouds: data.clouds.all,
+      lat: data.coord.lat,
+      lon: data.coord.lon,
     });
   } catch (error) {
     console.error('Weather error:', error);

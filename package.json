@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/google": "latest",
     "@ai-sdk/groq": "^1.2.9",
+    "@vapi-ai/web": "^2.5.2",
     "ai": "^4.1.0",
     "framer-motion": "^12.38.0",
     "leaflet": "^1.9.4",
