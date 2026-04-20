@@ -10,8 +10,8 @@ const imageCache = new Map<string, string | null>();
 
 // Manual overrides for plants whose Wikipedia page returns wrong/generic images
 const IMAGE_OVERRIDES: Record<string, string> = {
-  'rosa': 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Rose_Carmen_%E3%83%90%E3%83%A9_%E3%82%AB%E3%83%AL%E3%83%A1%E3%83%B3_%286902618905%29.jpg',
-  'rose': 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Rose_Carmen_%E3%83%90%E3%83%A9_%E3%82%AB%E3%83%AL%E3%83%A1%E3%83%B3_%286902618905%29.jpg',
+  'rosa': 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Red_rose_02.jpg',
+  'rose': 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Red_rose_02.jpg',
 };
 
 /**
